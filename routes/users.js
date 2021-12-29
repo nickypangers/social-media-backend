@@ -2,11 +2,13 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 
-router.get("/", (req, res) => {
-  User.find({})
-    .exec()
-    .then((data) => res.json(data))
-    .catch((err) => res.status(500).json({ message: err }));
+router.get("/", async (req, res) => {
+  try {
+    const users = await User.find().exec();
+    return res.json({ success: true, users });
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
 });
 
 router.post("/register", async (req, res) => {
@@ -18,7 +20,6 @@ router.post("/register", async (req, res) => {
     }
 
     const birthday = new Date(Date.UTC(dob.year, dob.month, dob.day));
-    // const birthday = new Date(`${dob.month}.${dob.day}.${dob.year}`);
 
     const user = new User({
       username,

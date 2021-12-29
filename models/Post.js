@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const PostSchema = mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+  },
   title: {
     type: String,
     required: true,
@@ -9,9 +13,13 @@ const PostSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
+  createdAt: {
     type: Date,
     default: Date.now(),
+  },
+  comments: {
+    type: Array,
+    default: () => [],
   },
 });
 
