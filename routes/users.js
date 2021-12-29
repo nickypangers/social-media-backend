@@ -17,9 +17,8 @@ router.post("/register", async (req, res) => {
       return res.json({ message: "User already exists" });
     }
 
-    const birthday = new Date(`${dob.month}.${dob.day}.${dob.year}`);
-
-    console.log(birthday);
+    const birthday = new Date(Date.UTC(dob.year, dob.month, dob.day));
+    // const birthday = new Date(`${dob.month}.${dob.day}.${dob.year}`);
 
     const user = new User({
       username,
@@ -49,7 +48,17 @@ router.post("/login", async (req, res) => {
     if (users.length === 0) {
       return res.json({ success: false, message: "User not found" });
     }
-    return res.json({ success: true });
+
+    const user = users[0];
+
+    return res.json({
+      success: true,
+      user: {
+        username: user.username,
+        email: user.email,
+        dob: user.dob,
+      },
+    });
   } catch (err) {
     res.status(500).json({ message: err });
   }
