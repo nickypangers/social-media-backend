@@ -38,6 +38,11 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.json({ message: "Please enter username and password" });
+    }
+
     const users = await User.find({
       $and: [{ username }, { password }],
     }).exec();
