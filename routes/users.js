@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
     const users = await User.find().exec();
     return res.json({ success: true, users });
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.json({ success: false, message: err.message });
   }
 });
 
@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
     await user.save();
     return res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.json({ success: false, message: err.message });
   }
 });
 
@@ -61,7 +61,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.json({ success: false, message: err.message });
   }
 });
 
