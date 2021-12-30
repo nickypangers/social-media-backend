@@ -35,11 +35,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const username = req.body.username;
+    const response = await Post.findByIdAndDelete({ _id: id, username });
+    if (response === null) {
+      return res.json({ success: false, message: "Unable to delete post." });
+    }
+    return res.json({ success: true });
+  } catch (err) {
+    return res.json({ success: false, message: err.message });
+  }
+});
+
 router.post("/:id/comments/add", async (req, res) => {
   try {
     const id = req.params.id;
 
-    const comment = await Comment.create({
+    const comment = new Comment({
       username: req.body.username,
       comment: req.body.comment,
     });

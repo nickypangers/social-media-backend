@@ -9,7 +9,7 @@ const CommentSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  createdAt: {
+  created_at: {
     type: Date,
     default: Date.now,
   },
@@ -24,7 +24,7 @@ const PostSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  createdAt: {
+  created_at: {
     type: Date,
     default: Date.now,
   },
