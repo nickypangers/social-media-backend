@@ -49,6 +49,10 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.post("/:id/like", async (req, res) => {
+  
+});
+
 router.post("/:id/comments/add", async (req, res) => {
   try {
     const id = req.params.id;

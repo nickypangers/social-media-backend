@@ -13,6 +13,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  liked: {
+    type: Array,
+    default: [],
+  },
   dob: {
     type: Date,
     required: true,

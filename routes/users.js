@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const { Post } = require("../models/Post");
 
 router.get("/", async (req, res) => {
   try {
@@ -16,7 +17,7 @@ router.post("/register", async (req, res) => {
     const { username, email, password, dob } = req.body;
     const users = await User.find({ $or: [{ username }, { email }] }).exec();
     if (users.length > 0) {
-      return res.json({ message: "User already exists" });
+      return res.json({ success: false, message: "User already exists" });
     }
 
     const birthday = new Date(Date.UTC(dob.year, dob.month, dob.day));
@@ -40,7 +41,10 @@ router.post("/login", async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.json({ message: "Please enter username and password" });
+      return res.json({
+        success: false,
+        message: "Please enter username and password",
+      });
     }
 
     const users = await User.find({
@@ -60,6 +64,28 @@ router.post("/login", async (req, res) => {
         dob: user.dob,
       },
     });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
+  }
+});
+
+router.get("/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+    if (!username) {
+      return res.json({ message: "Please enter username" });
+    }
+
+    const user = await User.findOne({ username }).lean().exec();
+    if (user === null) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    const userPosts = await Post.find({ username }).lean().exec();
+
+    user.posts = userPosts;
+
+    return res.json({ success: true, user: user });
   } catch (err) {
     res.json({ success: false, message: err.message });
   }
